@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+export AWS_ACCESS_KEY_ID="AKIAT27ABHHGXGJ32PKB"
+export AWS_SECRET_ACCESS_KEY="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"
+export AWS_DEFAULT_REGION="us-east-1"
+
+function green() {
+    text="${1:- }"
+    echo -e "\033[32m${text}\033[0m"
+}
+
+green "Deploying Cluster => canary-cluster"
+eksctl create cluster -f canary-cluster.yaml 
+
+green "Setting up Istio"
+istioctl install --set profile=default -y
+
+green "Cluster => "
+kubectl config current-context
+
+green "Adding Istio label to default namespace"
+kubectl label namespace default istio-injection=enabled
+
+green "Deploying sample application"
+kubectl apply -f manifests/
+
