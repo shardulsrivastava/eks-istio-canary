@@ -1,1 +1,3 @@
-# eks-istio-canary
+# Canary Deployment with Istio on EKS
+
+

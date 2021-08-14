@@ -4,10 +4,6 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-export AWS_ACCESS_KEY_ID="AKIAT27ABHHGXGJ32PKB"
-export AWS_SECRET_ACCESS_KEY="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"
-export AWS_DEFAULT_REGION="us-east-1"
-
 function green() {
     text="${1:- }"
     echo -e "\033[32m${text}\033[0m"
