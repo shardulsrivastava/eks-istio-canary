@@ -12,15 +12,20 @@ function green() {
 green "Deploying Cluster => canary-cluster"
 eksctl create cluster -f canary-cluster.yaml 
 
-green "Setting up Istio"
-istioctl install --set profile=default -y
-
 green "Cluster => "
 kubectl config current-context
+
+green "Setting up Istio"
+istioctl install --set profile=default -y
 
 green "Adding Istio label to default namespace"
 kubectl label namespace default istio-injection=enabled
 
-green "Deploying sample application"
+green "Deploying Sample application and Kiali CRD"
 kubectl apply -f manifests/
+
+green "Deploying Istio addons"
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.10.3/samples/addons/prometheus.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.10.3/samples/addons/grafana.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.10.3/samples/addons/kiali.yaml
 
